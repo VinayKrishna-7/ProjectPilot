@@ -1,261 +1,302 @@
-# 🚀 ProjectPilot — Enterprise Agile Project Management Platform
+# ProjectPilot
 
-[![Node.js Version](https://img.shields.io/badge/node-%3E%3D18.0.0-brightgreen.svg)](https://nodejs.org/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.4-blue?logo=typescript)](https://www.typescriptlang.org/)
-[![React](https://img.shields.io/badge/React-18.3-61dafb?logo=react)](https://react.dev/)
-[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.4-38bdf8?logo=tailwind-css)](https://tailwindcss.com/)
-[![Express.js](https://img.shields.io/badge/Express.js-4.18-lightgrey?logo=express)](https://expressjs.com/)
-[![MongoDB](https://img.shields.io/badge/MongoDB-7.0-green?logo=mongodb)](https://www.mongodb.com/)
-[![Playwright](https://img.shields.io/badge/Playwright-E2E_26%2F26_Passing-orange?logo=playwright)](https://playwright.dev/)
-[![Vitest](https://img.shields.io/badge/Vitest-Unit_17%2F17_Passing-yellow?logo=vitest)](https://vitest.dev/)
+[![CI Pipeline](https://github.com/VinayKrishna-7/ProjectPilot/actions/workflows/ci.yml/badge.svg)](https://github.com/VinayKrishna-7/ProjectPilot/actions/workflows/ci.yml)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.4-3178c6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![React](https://img.shields.io/badge/React-18.3-61dafb?logo=react&logoColor=black)](https://react.dev/)
+[![Node.js](https://img.shields.io/badge/Node.js-%3E%3D18.0-339933?logo=node.js&logoColor=white)](https://nodejs.org/)
+[![Express](https://img.shields.io/badge/Express-4.18-000000?logo=express&logoColor=white)](https://expressjs.com/)
+[![MongoDB](https://img.shields.io/badge/MongoDB-7.0-47a248?logo=mongodb&logoColor=white)](https://www.mongodb.com/)
 
-**ProjectPilot** is a production-grade, full-stack Jira and Trello hybrid Project Management SaaS application. Built on modern software engineering standards using the **MERN** stack (MongoDB, Express, React, Node.js) with **100% strict TypeScript**, **Tailwind CSS**, **@dnd-kit**, **TanStack Query**, and **Socket.IO**.
-
-It bridges the gap between high-level sprint planning and flexible drag-and-drop board execution, designed for high-velocity software engineering teams.
+ProjectPilot is a full-stack agile project management application that combines Trello-style Kanban boards with Jira-style sprint planning. It helps engineering teams organize tasks, manage sprint lifecycles, and coordinate project workloads with real-time updates. The application is implemented as a TypeScript monorepo using React, Express, MongoDB, and Socket.IO.
 
 ---
 
-## 🌟 Highlights & Special Implementations
+## Demo
 
-- ⚡ **Real-Time Kanban Engine (`@dnd-kit`)**:
-  - Smooth multi-container drag-and-drop reordering within and across columns.
-  - Optimistic UI updates with instant feedback and automatic rollback on network latency or failure.
-  - Multi-client live sync powered by Socket.IO rooms.
-
-- 🎯 **Jira-Style Sprints & Backlog Engine**:
-  - Complete state-machine lifecycle: `planned` ➔ `active` ➔ `completed`.
-  - Velocity metrics and story points estimation.
-  - Intelligent sprint completion modal allowing unresolved issues to rollover to another active/planned sprint or back into the backlog.
-
-- 🔎 **Issue Query Language (JQL) Search Engine**:
-  - Custom lexer, tokenizer, and Abstract Syntax Tree (AST) query parser on the backend.
-  - Executes queries such as `status = done AND priority in (high, highest) ORDER BY position DESC`.
-  - Full-text search across titles, keys, descriptions, and assignees.
-
-- 🛡️ **Optimistic Concurrency Control (OCC)**:
-  - Version-based document locking (`version` key verification) prevents race conditions and accidental overwrites when multiple users edit the same ticket at once.
-
-- 💾 **Dual-Mode Persistence (Zero-Config Fallback)**:
-  - Seamlessly runs with **MongoDB** (local or Atlas cloud) using Mongoose models.
-  - Automatically activates an intelligent **In-Memory & Disk Fallback Engine** if MongoDB is offline, allowing immediate evaluation with zero database installation. Auto-reconnects as soon as MongoDB is detected.
-
-- 🏢 **Multi-Tenant Workspaces with Strict Isolation**:
-  - Fine-grained Role-Based Access Control (RBAC): `owner`, `admin`, `member`.
-  - 100% clean account onboarding: new accounts start with zero mock or leaked workspaces, greeted by a guided first-workspace creation flow.
-
-- 💬 **Collaborative Audit Trail & Notifications**:
-  - Real-time Markdown comments with user mentions.
-  - Immutable audit logs capturing every status change, assignment, attachment, and priority update.
-  - In-app notification bell with live WebSocket push badges.
-
-- 🌓 **First-Class Theming & Command Palette**:
-  - Instant toggle between Dark Mode and Light Mode with zero flicker.
-  - Global `⌘K` / `Ctrl+K` Command Palette for instant navigation to projects, boards, and account settings.
+* **Live Demo**: *Deployment link coming soon*
+* **Demo Video**: *Walkthrough recording coming soon*
+* **API Documentation**: Available locally via Swagger UI at [http://localhost:5000/api/docs](http://localhost:5000/api/docs) when running the server.
 
 ---
 
-## 🏗️ Architecture & Monorepo Layout
+## Screenshots
 
-ProjectPilot is organized as an **npm workspaces monorepo** with strict boundary separation between shared contracts, backend services, and the frontend client.
+<!--
+To display screenshots, capture images from your running application, place them in a docs/screenshots/ directory, and update the paths below.
+-->
 
-```
-projectpilot/
-├── shared/                     # Shared TypeScript contracts & DTOs
-│   ├── src/                    # Single source of truth for types, enums, interfaces
-│   └── package.json            # @taskflow/shared package
-│
-├── server/                     # Node.js + Express + Socket.IO API
-│   ├── src/
-│   │   ├── config/             # Environment validation, MongoDB & Cloudinary config
-│   │   ├── controllers/        # Express route handlers
-│   │   ├── middleware/         # JWT auth, RBAC permissions, Zod validation, rate limits
-│   │   ├── models/             # Mongoose schemas (14 models with compound indexes)
-│   │   ├── routes/             # Modular RESTful API routers
-│   │   ├── services/           # Business logic (JQL, Sprints, Audit, Auth)
-│   │   ├── sockets/            # Socket.IO rooms & real-time event dispatchers
-│   │   ├── scripts/            # Seed scripts for demo data and performance stress testing
-│   │   └── test/               # Vitest API and unit test suites
-│   └── Dockerfile              # Production multi-stage Docker build
-│
-├── client/                     # React 18 + Vite SPA
+| Kanban Board | Sprint Backlog |
+| :---: | :---: |
+| *Add screenshot: `docs/screenshots/board.png`* | *Add screenshot: `docs/screenshots/backlog.png`* |
+
+| Issue Details & Comments | Project Reports |
+| :---: | :---: |
+| *Add screenshot: `docs/screenshots/issue-detail.png`* | *Add screenshot: `docs/screenshots/reports.png`* |
+
+---
+
+## Features
+
+* **Multi-Tenant Workspaces & Projects**: Organize work into isolated workspaces with role-based access control (`owner`, `admin`, `member`), unique project keys, and member management.
+* **Kanban Board**: Drag-and-drop task movement across customizable columns powered by `@dnd-kit`, featuring reordering within columns, status transitions, and optimistic UI updates.
+* **Sprint Planning & Backlog**: Manage sprint lifecycles (`planned`, `active`, `completed`), track story point velocity, groom backlog items, and reallocate unfinished tasks on sprint completion.
+* **Issue Tracking**: Create and edit tasks, bugs, and stories with priorities, assignees, due dates, file attachments, and markdown descriptions.
+* **Real-Time Synchronization**: Live board movements, issue edits, and notification updates delivered across connected clients using Socket.IO rooms.
+* **Issue Query Language (JQL)**: Filter issues using a custom tokenizer and parser supporting queries such as `status = done AND priority in (high, highest) ORDER BY position DESC`.
+* **Optimistic Concurrency Control (OCC)**: Version-based document locking to detect concurrent edits and prevent overwriting changes made by other team members.
+* **Audit Trail & Discussion**: Immutable activity logs tracking status changes and field updates, alongside threaded comments with timestamps.
+* **Project Analytics**: Visual breakdowns of issue distribution by status, priority, and type, as well as 14-day resolution metrics rendered with Recharts.
+* **User Interface & Theme**: Responsive layout with collapsible sidebar, instant light and dark mode switching, and a global keyboard command palette (`⌘K` / `Ctrl+K`).
+
+---
+
+## Tech Stack
+
+### Frontend
+* **Core**: React 18, TypeScript, Vite
+* **State Management**: TanStack React Query (server cache), Zustand (client UI state)
+* **Styling & UI**: Tailwind CSS, Radix UI primitives, Lucide React icons
+* **Interactivity**: `@dnd-kit` (drag and drop), cmdk (command palette)
+* **Data Visualization**: Recharts
+* **HTTP Client**: Axios
+
+### Backend
+* **Runtime & Framework**: Node.js, Express.js, TypeScript
+* **Real-Time**: Socket.IO
+* **Validation**: Zod
+* **Authentication**: JSON Web Tokens (JWT access & refresh tokens), bcryptjs
+* **File Uploads**: Multer (with optional Cloudinary storage)
+* **API Documentation**: Swagger UI (`swagger-ui-express`, `swagger-jsdoc`)
+
+### Database
+* **Primary**: MongoDB with Mongoose ODM (compound indexes and schema validation)
+* **Fallback**: Memory and disk-based fallback persistence for running without a local MongoDB instance
+
+### Real-time
+* **Engine**: Socket.IO with project and issue-specific room broadcasting
+
+### Testing
+* **Unit & API Testing**: Vitest, Supertest
+* **End-to-End Testing**: Playwright (multi-browser testing)
+
+### DevOps & Deployment
+* **Containers**: Docker, Docker Compose
+* **CI Pipeline**: GitHub Actions (type checking, linting, unit tests, and build verification)
+
+---
+
+## Architecture
+
+ProjectPilot is organized as an npm workspaces monorepo with three primary packages:
+
+1. **`shared`**: Contains shared TypeScript types, enums, interfaces, and DTO definitions. Both client and server import from this package, ensuring single-source-of-truth contracts across the API boundary.
+2. **`server`**: Layered Express architecture with dedicated routers, middleware (JWT authentication, role authorization, rate limiting, request validation), service layers for business logic (JQL parser, sprint handling, audit logging), and Mongoose models. Includes a dual-persistence layer that defaults to MongoDB and automatically falls back to an in-memory/file store when a database connection is unavailable.
+3. **`client`**: Single Page Application built with Vite and React. Follows a feature-sliced directory structure (`features/board`, `features/sprint`, `features/issue`, `features/auth`, etc.). Server data is cached and synchronized with TanStack Query, while local preferences (theme, filters) reside in Zustand stores.
+
+---
+
+## Project Structure
+
+```text
+ProjectPilot/
+├── client/                     # Frontend React SPA
 │   ├── src/
 │   │   ├── app/                # Query client, Router config, theme provider
-│   │   ├── components/         # Reusable UI library (Radix primitives + Tailwind)
-│   │   ├── features/           # Feature-sliced modules:
-│   │   │   ├── auth/           # Login, Register, Session Management
-│   │   │   ├── board/          # Drag-and-drop Kanban board (@dnd-kit)
-│   │   │   ├── issue/          # Issue modals, details, attachments, comments
-│   │   │   ├── sprint/         # Backlog, sprint management, complete dialog
-│   │   │   ├── workspace/      # Multi-tenant workspace switcher & settings
-│   │   │   └── reports/        # Recharts analytics and velocity graphs
-│   │   ├── pages/              # Routed view components
-│   │   └── stores/             # Zustand state stores (auth, layout, filters)
-│   └── Dockerfile              # Multi-stage Nginx production container
-│
-├── e2e/                        # Playwright End-to-End Test Suite
-│   ├── auth.spec.ts            # Auth flows, session isolation, clean onboarding tests
-│   ├── board.spec.ts           # Kanban drag-and-drop & status transitions
-│   ├── sprints.spec.ts         # Sprint lifecycle & backlog interactions
-│   └── jql.spec.ts             # JQL search filtering tests
-│
-├── docker-compose.yml          # Containerized orchestration (App + MongoDB)
+│   │   ├── components/         # Common UI components (buttons, dialogs, inputs)
+│   │   ├── features/           # Feature-sliced modules (auth, board, issue, sprint)
+│   │   ├── pages/              # Route view components
+│   │   ├── stores/             # Zustand state stores
+│   │   └── test/               # Client unit tests
+│   └── Dockerfile              # Production Nginx container
+├── server/                     # Backend Express REST & WebSocket API
+│   ├── src/
+│   │   ├── config/             # Environment, database, and Swagger configuration
+│   │   ├── controllers/        # Route handler functions
+│   │   ├── middleware/         # Auth, validation, error handling, rate limits
+│   │   ├── models/             # Mongoose schemas and models
+│   │   ├── routes/             # Express route declarations
+│   │   ├── services/           # Business logic (JQL, sprints, audit, fallback)
+│   │   ├── sockets/            # Socket.IO connection and event dispatchers
+│   │   ├── scripts/            # Database seed scripts
+│   │   └── test/               # Server API test suite (Vitest + Supertest)
+│   └── Dockerfile              # Multi-stage Node.js container
+├── shared/                     # Shared TypeScript contracts and interfaces
+│   └── src/index.ts            # Common types and enums
+├── e2e/                        # Playwright end-to-end test suite
+├── docs/                       # Technical architecture and design docs
+├── .github/workflows/          # GitHub Actions CI workflow
+├── docker-compose.yml          # Container configuration for client, server, and MongoDB
 ├── playwright.config.ts        # Playwright test runner configuration
-└── package.json                # Monorepo root scripts & dev dependencies
+└── package.json                # Root monorepo workspace scripts
 ```
 
 ---
 
-## ⚡ Quick Start Guide
+## Getting Started
 
 ### Prerequisites
-- **Node.js** >= 18.0.0
-- **npm** >= 9.0.0
-- *(Optional)* **MongoDB** 6.0+ (the application will run smoothly in standby fallback mode even without MongoDB)
+* **Node.js** >= 18.0.0
+* **npm** >= 9.0.0
+* *(Optional)* **MongoDB** 6.0+ (the application starts in fallback mode if MongoDB is not running locally)
 
-### 1. Clone & Install Dependencies
-```bash
-git clone <YOUR_GITHUB_REPO_URL>
-cd ProjectManagement
-npm install
-```
+### Installation & Setup
 
-### 2. Configure Environment Variables
-Copy `.env.example` into `server/.env`:
-```bash
-cp .env.example server/.env
-```
-*(On Windows CMD: `copy .env.example server\.env`)*
+1. **Clone the repository**:
+   ```bash
+   git clone https://github.com/VinayKrishna-7/ProjectPilot.git
+   cd ProjectPilot
+   ```
 
-The default values are pre-configured for instant local development:
-```env
-NODE_ENV=development
-PORT=5000
-MONGODB_URI=mongodb://localhost:27017/projectpilot
-JWT_SECRET=dev-secret-change-in-production
-JWT_REFRESH_SECRET=dev-refresh-secret-change-in-production
-CLIENT_URL=http://localhost:5173
-```
+2. **Install workspace dependencies**:
+   ```bash
+   npm install
+   ```
 
-### 3. Seed Demo Data (Optional)
-To test with sample data (mock teams, projects, sprints, and 15+ issues):
-```bash
-npm run seed
-```
+3. **Configure environment variables**:
+   ```bash
+   # On macOS/Linux:
+   cp .env.example server/.env
 
-**Pre-seeded Demo Credentials:**
-| Role | Email | Password |
-|---|---|---|
-| Admin / Lead | `demo@projectpilot.dev` | `Password123!` |
-| Product Manager | `sarah@projectpilot.dev` | `Password123!` |
-| Developer | `mike@projectpilot.dev` | `Password123!` |
+   # On Windows (Command Prompt):
+   copy .env.example server\.env
+   ```
 
-*(Note: Creating a new account via the UI starts with a 100% clean workspace ready for your team's custom configuration).*
+4. **Build the shared package**:
+   ```bash
+   npm run build --workspace=shared
+   ```
 
-### 4. Start Development Servers
-```bash
-npm run dev
-```
-- **Web App (Vite UI):** [http://localhost:5173](http://localhost:5173)
-- **API Server:** [http://localhost:5000](http://localhost:5000)
-- **API Health Check:** [http://localhost:5000/health](http://localhost:5000/health)
-- **Interactive Swagger Docs:** [http://localhost:5000/api/docs](http://localhost:5000/api/docs)
+5. **(Optional) Seed sample data**:
+   Populates sample workspaces, projects, sprints, and issues for testing:
+   ```bash
+   npm run seed
+   ```
+
+   *Sample Seed Credentials:*
+   * Admin: `demo@projectpilot.dev` / `Password123!`
+   * Product Manager: `sarah@projectpilot.dev` / `Password123!`
+   * Developer: `mike@projectpilot.dev` / `Password123!`
+
+   *(Note: Newly registered accounts via the signup page start with a clean workspace without demo data).*
+
+6. **Start development servers**:
+   ```bash
+   npm run dev
+   ```
+   * **Frontend UI**: [http://localhost:5173](http://localhost:5173)
+   * **Backend API**: [http://localhost:5000](http://localhost:5000)
+   * **API Documentation**: [http://localhost:5000/api/docs](http://localhost:5000/api/docs)
+   * **Health Check**: [http://localhost:5000/health](http://localhost:5000/health)
 
 ---
 
-## 🛠️ CLI Commands & NPM Scripts
+## Available Scripts
 
 Run these scripts from the repository root:
 
-| Command | Action |
+| Command | Description |
 |---|---|
-| `npm run dev` | Concurrently launches backend API & Vite frontend with hot module reload (HMR) |
-| `npm run build` | Compiles `@taskflow/shared`, builds server TypeScript, and generates optimized Vite client bundles |
+| `npm run dev` | Runs backend API and Vite client concurrently in development mode |
+| `npm run build` | Compiles `@taskflow/shared`, server TypeScript, and Vite client bundles |
 | `npm run start` | Boots the compiled production Express server |
-| `npm run test` | Executes all Vitest test suites across client and server |
-| `npm run test:e2e` | Runs headless Playwright browser tests across all core user flows |
-| `npm run type-check` | Runs `tsc --noEmit` across all workspaces to guarantee type safety |
-| `npm run lint` | Lints JavaScript and TypeScript files with ESLint |
-| `npm run seed` | Populates database with sample workspaces, projects, sprints, and issues |
+| `npm run test` | Runs Vitest unit and integration test suites across server and client |
+| `npm run test:e2e` | Runs Playwright end-to-end tests against browser instances |
+| `npm run type-check` | Runs `tsc --noEmit` across all workspaces to verify TypeScript types |
+| `npm run lint` | Runs ESLint across server and client workspaces |
+| `npm run seed` | Seeds MongoDB with sample projects, members, and issues |
 
 ---
 
-## 🐳 Docker Deployment
+## Environment Variables
 
-To launch the full containerized stack (MongoDB, Express Server, and Nginx-backed Client):
-
-```bash
-docker-compose up --build -d
-```
-
-- **Frontend:** [http://localhost:5173](http://localhost:5173)
-- **Backend API:** [http://localhost:5000](http://localhost:5000)
-- **MongoDB:** `localhost:27017`
-
-To inspect container logs:
-```bash
-docker-compose logs -f
-```
-
-To stop containers:
-```bash
-docker-compose down -v
-```
-
----
-
-## 🧪 Testing & Verification
-
-ProjectPilot is backed by automated tests across every layer:
-
-### Unit & API Tests (Vitest)
-```bash
-npm run test
-```
-- **Server:** 11 passing tests covering health checks, readiness metrics, OpenAPI schemas, JQL tokenizer, and auth guards.
-- **Client:** 6 passing tests covering utility formatters, date helpers, and state transformations.
-
-### End-to-End Tests (Playwright)
-```bash
-npm run test:e2e
-```
-- **26/26 Passing Tests**:
-  - Complete authentication cycle, validation errors, and profile management.
-  - Clean slate onboarding for newly registered accounts.
-  - Multi-column drag-and-drop movement with status updates.
-  - Sprint creation, starting, issue transitions, and sprint completion rollover.
-  - Optimistic concurrency conflict detection.
-  - Multi-criteria JQL search filtering and sorting.
-
----
-
-## ⚙️ Environment Configuration
+Configure these variables in `server/.env`. Safe defaults are provided in `.env.example`:
 
 | Variable | Required | Default | Description |
 |---|:---:|---|---|
 | `NODE_ENV` | No | `development` | Environment mode (`development`, `production`, `test`) |
-| `PORT` | No | `5000` | Backend API port |
-| `CLIENT_URL` | No | `http://localhost:5173` | Allowed CORS origin |
-| `MONGODB_URI` | No | `mongodb://localhost:27017/projectpilot` | MongoDB connection string |
-| `JWT_SECRET` | **Yes** | `dev-secret-...` | Secret used for signing short-lived access tokens |
-| `JWT_EXPIRES_IN` | No | `15m` | Access token lifespan |
-| `JWT_REFRESH_SECRET` | **Yes** | `dev-refresh-...` | Secret for issuing long-lived refresh tokens |
-| `JWT_REFRESH_EXPIRES_IN` | No | `7d` | Refresh token lifespan |
-| `RATE_LIMIT_WINDOW_MS` | No | `900000` | Rate limit duration in ms (15 minutes) |
-| `RATE_LIMIT_MAX` | No | `300` | Max API requests per IP window |
-| `CLOUDINARY_CLOUD_NAME` | No | `""` | Optional Cloudinary cloud name for issue file uploads |
-| `CLOUDINARY_API_KEY` | No | `""` | Cloudinary API key |
-| `CLOUDINARY_API_SECRET` | No | `""` | Cloudinary API secret |
+| `PORT` | No | `5000` | Port for Express backend server |
+| `CLIENT_URL` | No | `http://localhost:5173` | Allowed CORS origin for frontend client |
+| `MONGODB_URI` | No | `mongodb://localhost:27017/projectpilot` | MongoDB connection URI |
+| `JWT_SECRET` | Yes | `your-jwt-secret-key` | Secret key for signing access tokens |
+| `JWT_EXPIRES_IN` | No | `15m` | Expiration window for access tokens |
+| `JWT_REFRESH_SECRET` | Yes | `your-jwt-refresh-secret-key` | Secret key for signing refresh tokens |
+| `JWT_REFRESH_EXPIRES_IN` | No | `7d` | Expiration window for refresh tokens |
+| `RATE_LIMIT_WINDOW_MS` | No | `900000` | Rate limiting window in milliseconds (15 min) |
+| `RATE_LIMIT_MAX` | No | `300` | Maximum requests per IP in the rate window |
+| `CLOUDINARY_CLOUD_NAME` | No | `""` | Optional Cloudinary cloud name for issue attachments |
+| `CLOUDINARY_API_KEY` | No | `""` | Optional Cloudinary API key |
+| `CLOUDINARY_API_SECRET` | No | `""` | Optional Cloudinary API secret |
+| `SMTP_HOST` | No | `""` | Optional SMTP server for email notifications |
+| `SMTP_PORT` | No | `587` | Optional SMTP port |
+| `SMTP_USER` | No | `""` | Optional SMTP username |
+| `SMTP_PASS` | No | `""` | Optional SMTP password |
+| `SMTP_FROM` | No | `noreply@projectpilot.dev` | Default sender address for system emails |
 
 ---
 
-## 🤝 Contributing
+## Testing
 
-1. Fork the Project.
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`).
-3. Ensure type check and tests pass (`npm run type-check && npm run test`).
-4. Commit your Changes (`git commit -m 'feat: add some AmazingFeature'`).
-5. Push to the Branch (`git push origin feature/AmazingFeature`).
-6. Open a Pull Request.
+The codebase includes test suites for unit logic, API endpoints, and end-to-end browser interactions:
+
+### Unit and API Tests (Vitest)
+Executes server route tests, authorization guards, JQL tokenizer/parser logic, and client utilities:
+```bash
+npm run test
+```
+
+### End-to-End Tests (Playwright)
+Validates core browser user flows including authentication, workspace onboarding, Kanban column drag-and-drop, sprint transitions, and search filters:
+```bash
+npm run test:e2e
+```
+
+### Type Checking
+Ensures strict TypeScript compliance across all packages without emitting output:
+```bash
+npm run type-check
+```
 
 ---
 
+## Docker
+
+Run the entire application stack (MongoDB, Express server, and Nginx-backed client) using Docker Compose:
+
+```bash
+# Build and launch containers in detached mode
+docker-compose up --build -d
+
+# View container logs
+docker-compose logs -f
+
+# Stop and remove containers
+docker-compose down
+```
+
+* **Frontend**: [http://localhost:5173](http://localhost:5173)
+* **Backend API**: [http://localhost:5000](http://localhost:5000)
+* **MongoDB**: `localhost:27017`
+
+---
+
+## Security
+
+* Secrets, database connection strings, and JWT keys must be defined in environment variables and never committed to version control.
+* Sensitive file patterns such as `.env`, `.env.local`, and build directories are excluded via `.gitignore`.
+* API routes enforce role-based access control, input validation via Zod schemas, HTTP rate limiting, and HTTP security headers via Helmet.
+
+---
+
+## Future Improvements
+
+* Webhook integrations for external notifications (Slack, Discord, Microsoft Teams).
+* User-defined custom issue types and customizable workflow states beyond standard columns.
+* Time tracking and work logging with estimated versus actual hours.
+* Data export options (CSV, JSON, PDF) for sprint summaries and issue lists.
+* Multi-factor authentication (MFA/2FA) support.
+
+---
+
+## License
+
+A license has not yet been assigned to this repository. A license file can be added separately.
