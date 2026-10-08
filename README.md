@@ -41,9 +41,6 @@ The app will be running at:
 - Server: http://localhost:5000
 - API Docs: http://localhost:5000/api/docs
 
-**Demo account:**
-- Email: `demo@projectpilot.dev`
-- Password: `Password123!`
 
 ## Scripts
 
