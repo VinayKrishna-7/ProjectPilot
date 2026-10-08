@@ -62,8 +62,9 @@ export function AppSidebar() {
         <Button
           variant="ghost"
           size="icon"
-          className="h-7 w-7 shrink-0"
+          className="h-7 w-7 shrink-0 text-muted-foreground hover:text-foreground"
           onClick={() => setSidebarCollapsed(!collapsed)}
+          title={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
         >
           {collapsed ? <ChevronRight className="h-3.5 w-3.5" /> : <ChevronLeft className="h-3.5 w-3.5" />}
         </Button>

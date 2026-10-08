@@ -19,26 +19,42 @@ import { ThemeToggle } from './ThemeToggle';
 
 export function AppHeader() {
   const user = useAuthStore((s) => s.user);
-  const { toggleSidebar, setCommandPaletteOpen } = useUIStore();
+  const { sidebarCollapsed, toggleSidebar, setCommandPaletteOpen } = useUIStore();
   const { mutate: logout } = useLogout();
 
   return (
     <header className="h-14 border-b bg-card flex items-center justify-between px-4 shrink-0">
-      <div className="flex items-center gap-3">
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={toggleSidebar}
-          className="h-8 w-8"
-        >
-          <Menu className="h-4 w-4" />
-        </Button>
-        <Link to="/dashboard" className="flex items-center gap-2">
-          <div className="w-6 h-6 bg-primary rounded flex items-center justify-center">
-            <span className="text-primary-foreground font-bold text-xs">PP</span>
-          </div>
-          <span className="font-semibold text-sm">ProjectPilot</span>
-        </Link>
+      <div className="flex items-center gap-2">
+        {/* Mobile only: show hamburger toggle & logo when sidebar is hidden */}
+        <div className="flex md:hidden items-center gap-2">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={toggleSidebar}
+            className="h-8 w-8"
+          >
+            <Menu className="h-4 w-4" />
+          </Button>
+          <Link to="/dashboard" className="flex items-center gap-2">
+            <div className="w-6 h-6 bg-primary rounded flex items-center justify-center">
+              <span className="text-primary-foreground font-bold text-xs">PP</span>
+            </div>
+            <span className="font-semibold text-sm">ProjectPilot</span>
+          </Link>
+        </div>
+
+        {/* Desktop: when sidebar is collapsed, provide expand button */}
+        {sidebarCollapsed && (
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={toggleSidebar}
+            className="hidden md:flex h-8 w-8 text-muted-foreground hover:text-foreground"
+            title="Expand sidebar"
+          >
+            <Menu className="h-4 w-4" />
+          </Button>
+        )}
       </div>
 
       <div className="flex-1 max-w-xl mx-4 hidden md:block">
