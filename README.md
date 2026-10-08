@@ -1,6 +1,6 @@
 # ProjectPilot
 
-An agile project management and issue tracking tool for engineering teams to plan sprints, track tasks across Kanban boards, and collaborate in real time.
+A project management tool for tracking issues, planning sprints, and managing Kanban boards in real time.
 
 ## Features
 
