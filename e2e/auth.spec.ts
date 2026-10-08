@@ -111,11 +111,12 @@ test.describe('Authentication & Session Management', () => {
     // Create a custom workspace with user's own name and style
     await page.getByRole('button', { name: /Create Workspace/i }).click();
     await expect(page.getByRole('dialog')).toBeVisible();
-    await page.getByLabel(/Workspace Name/i).fill('My Custom Studio');
+    const customWsName = `Custom Studio ${Date.now()}`;
+    await page.getByLabel(/Workspace Name/i).fill(customWsName);
     await page.getByRole('button', { name: /Create Workspace/i }).last().click();
 
     // Now the workspace is active and shows clean project empty state
-    await expect(page.getByText('My Custom Studio').first()).toBeVisible();
+    await expect(page.getByText(customWsName).first()).toBeVisible();
     await expect(page.getByText('No projects yet')).toBeVisible();
   });
 });
