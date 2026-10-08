@@ -31,7 +31,7 @@ export async function seedDatabase(): Promise<void> {
     Notification.deleteMany({}),
   ]);
 
-  console.log('🧹 Cleaned existing database collections');
+  console.log('Cleaned database collections');
 
   // 1. Create Users
   const demoUser = await User.create({
@@ -61,7 +61,7 @@ export async function seedDatabase(): Promise<void> {
     isEmailVerified: true,
   });
 
-  console.log('👤 Created demo users');
+  console.log('Created demo users');
 
   // 2. Create Workspace
   const workspace = await Workspace.create({
@@ -77,14 +77,14 @@ export async function seedDatabase(): Promise<void> {
     { workspace: workspace._id, user: memberUser2._id, role: 'member' },
   ]);
 
-  console.log('🏢 Created workspace & members');
+  console.log('Created workspace and members');
 
   // 3. Create Project
   const project = await Project.create({
     workspace: workspace._id,
     name: 'ProjectPilot Platform',
     key: 'PP',
-    description: 'Next-generation Jira and Trello hybrid management tool',
+    description: 'Engineering workspace for ProjectPilot',
     lead: demoUser._id,
     status: 'active',
     lastIssueNumber: 18,
@@ -96,7 +96,7 @@ export async function seedDatabase(): Promise<void> {
     { project: project._id, user: memberUser2._id, role: 'member' },
   ]);
 
-  console.log('📁 Created project & project members');
+  console.log('Created project and members');
 
   // 4. Create Board & Columns
   const board = await Board.create({
@@ -111,7 +111,7 @@ export async function seedDatabase(): Promise<void> {
     { board: board._id, name: 'Done', status: 'done', color: '#10B981', position: 3 },
   ]);
 
-  console.log('📋 Created board and columns');
+  console.log('Created board and columns');
 
   // 5. Create Sprints
   const sprint1 = await Sprint.create({
@@ -132,7 +132,7 @@ export async function seedDatabase(): Promise<void> {
     status: 'planned',
   });
 
-  console.log('⚡ Created sprints');
+  console.log('Created sprints');
 
   // 6. Create Labels
   const [lblFrontend, lblBackend, lblBug, lblUrgent, lblAuth] = await Label.insertMany([
@@ -143,7 +143,7 @@ export async function seedDatabase(): Promise<void> {
     { project: project._id, name: 'Auth', color: '#8B5CF6' },
   ]);
 
-  console.log('🏷️  Created labels');
+  console.log('Created labels');
 
   // 7. Create Issues
   const issuesData = [
@@ -368,7 +368,7 @@ export async function seedDatabase(): Promise<void> {
     }))
   );
 
-  console.log(`📌 Created ${createdIssues.length} issues`);
+  console.log(`Created ${createdIssues.length} issues`);
 
   // 8. Create Comments
   const issue3 = createdIssues.find((i) => i.key === 'TF-3');
@@ -429,5 +429,5 @@ export async function seedDatabase(): Promise<void> {
     },
   ]);
 
-  console.log('🔔 Created comments, activity history, and notifications');
+  console.log('Created comments, activity history, and notifications');
 }

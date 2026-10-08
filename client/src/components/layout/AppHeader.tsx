@@ -83,7 +83,7 @@ export function AppHeader() {
 
         <NotificationBell />
 
-        {/* One-click theme toggle — Sun/Moon icon, instant switch */}
+        {/* Theme toggle */}
         <ThemeToggle />
 
         <DropdownMenu>

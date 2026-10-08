@@ -2,7 +2,7 @@
   "name": "projectpilot",
   "version": "1.0.0",
   "private": true,
-  "description": "ProjectPilot - Production-quality Project Management SaaS",
+  "description": "Project management web application with Kanban boards and sprints",
   "workspaces": [
     "client",
     "server",

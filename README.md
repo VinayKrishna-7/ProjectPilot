@@ -1,6 +1,6 @@
 # ProjectPilot
 
-> A modern, full-stack agile project management platform combining Trello-style Kanban workflows with Jira-style sprint planning.
+A full-stack agile project management application built with React, Node.js, and MongoDB. Includes Kanban boards, sprint planning, issue tracking, and real-time collaboration.
 
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.4-3178c6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![React](https://img.shields.io/badge/React-18-61dafb?logo=react&logoColor=black)](https://react.dev/)
@@ -12,100 +12,108 @@
 
 ---
 
-## ✨ Features
+## Features
 
-- **Multi-Tenant Workspaces & Projects**: Isolated workspaces with role-based access control (`owner`, `admin`, `member`) and team directories.
-- **Interactive Kanban Boards**: Fluid drag-and-drop column workflows powered by `@dnd-kit` with optimistic updates.
-- **Sprint Management & Backlog**: Sprint planning, backlog grooming, velocity tracking, and rollover of incomplete tasks.
-- **Real-Time Collaboration**: Instant task updates, live board movements, and notifications via Socket.IO rooms.
-- **Issue Query Language (JQL)**: Custom query parser for complex filtering (e.g. `status = "done" AND priority = "high"`).
-- **Optimistic Concurrency Control (OCC)**: Version-checked document updates preventing concurrent write collisions.
-- **Analytics & Audit Logs**: Interactive burn-up charts and activity timelines powered by Recharts.
-- **Keyboard Command Palette (`⌘K` / `Ctrl+K`)**: Quick navigation, search, and action triggers across the platform.
-
----
-
-## 🛠️ Tech Stack
-
-| Layer | Technologies |
-|---|---|
-| **Frontend** | React 18, Vite, TypeScript, Tailwind CSS, Radix UI, TanStack Query, Zustand, `@dnd-kit` |
-| **Backend** | Node.js, Express, TypeScript, Socket.IO, Zod, JWT, Helmet |
-| **Database** | MongoDB with Mongoose ODM |
-| **Testing** | Vitest, Playwright (E2E), Supertest |
-| **Monorepo** | npm Workspaces (`client`, `server`, `shared`) |
+- **Workspaces & Projects**: Isolated team workspaces with role-based permissions (`owner`, `admin`, `member`) and team directories.
+- **Kanban Board**: Drag-and-drop task movement across customizable columns with optimistic UI updates.
+- **Sprint Management**: Sprint planning, backlog grooming, velocity tracking, and sprint completion workflows.
+- **Real-Time Collaboration**: Live board updates and notifications across connected clients using Socket.IO.
+- **Issue Query Language (JQL)**: Custom query parser for searching issues (e.g., `status = "done" AND priority = "high"`).
+- **Activity & Comments**: Change logs, status transitions, and threaded discussions on issues.
+- **Reports & Analytics**: Project velocity charts and issue distributions by type, priority, and status.
+- **UI & Accessibility**: Responsive layout, light and dark themes, and command palette (`Cmd/Ctrl + K`).
 
 ---
 
-## 🚀 Quick Start
+## Tech Stack
+
+- **Frontend**: React 18, Vite, TypeScript, Tailwind CSS, Radix UI, TanStack Query, Zustand, `@dnd-kit`
+- **Backend**: Node.js, Express, TypeScript, Socket.IO, Zod, JWT
+- **Database**: MongoDB with Mongoose ODM
+- **Testing**: Vitest, Playwright, Supertest
+- **Monorepo**: npm workspaces (`client`, `server`, `shared`)
+
+---
+
+## Getting Started
 
 ### Prerequisites
-- [Node.js](https://nodejs.org/) (v18+)
-- [MongoDB](https://www.mongodb.com/) (local service or connection URI)
 
-### Setup
+- Node.js 18 or higher
+- npm 9 or higher
+- MongoDB instance running locally on port 27017 (or a remote connection string)
 
-1. **Clone & Install**:
+### Installation
+
+1. **Clone the repository**:
    ```bash
    git clone https://github.com/VinayKrishna-7/ProjectPilot.git
    cd ProjectPilot
+   ```
+
+2. **Install dependencies**:
+   ```bash
    npm install
    ```
 
-2. **Environment Configuration**:
+3. **Configure environment**:
    ```bash
    cp .env.example .env
    ```
 
-3. **Build Shared Library & Seed Database**:
+4. **Build shared types package**:
    ```bash
    npm run build --workspace=shared
+   ```
+
+5. **Seed demo data (optional)**:
+   ```bash
    npm run seed
    ```
 
-4. **Start Development Servers**:
+   **Demo login:**
+   - Email: `demo@projectpilot.dev`
+   - Password: `Password123!`
+
+6. **Start development servers**:
    ```bash
    npm run dev
    ```
 
-- **Frontend**: [http://localhost:5173](http://localhost:5173)
-- **Backend API**: [http://localhost:5000](http://localhost:5000)
-- **Swagger Docs**: [http://localhost:5000/api/docs](http://localhost:5000/api/docs)
-- **Health Check**: [http://localhost:5000/api/health](http://localhost:5000/api/health)
-
-#### Demo Credentials
-- **Email**: `demo@projectpilot.dev`
-- **Password**: `Password123!`
+- Frontend: [http://localhost:5173](http://localhost:5173)
+- Backend API: [http://localhost:5000](http://localhost:5000)
+- API Docs (Swagger): [http://localhost:5000/api/docs](http://localhost:5000/api/docs)
+- Health check: [http://localhost:5000/api/health](http://localhost:5000/api/health)
 
 ---
 
-## 📜 Available Scripts
+## Scripts
 
-| Command | Purpose |
+| Command | Description |
 |---|---|
-| `npm run dev` | Launch client and server concurrently in development mode |
-| `npm run build` | Compile `shared`, `server`, and `client` production bundles |
-| `npm run test` | Run Vitest unit & integration test suites |
-| `npm run test:e2e` | Run Playwright end-to-end browser test suites |
-| `npm run type-check` | Verify TypeScript types across all workspaces |
+| `npm run dev` | Start client and server in development mode |
+| `npm run build` | Build shared, server, and client packages for production |
+| `npm run test` | Run unit and integration tests (Vitest) |
+| `npm run test:e2e` | Run end-to-end tests (Playwright) |
+| `npm run type-check` | Run TypeScript type checks across workspaces |
 | `npm run lint` | Run ESLint checks |
-| `npm run seed` | Seed database with demo workspaces, projects, and issues |
+| `npm run seed` | Seed database with initial workspace and project data |
 
 ---
 
-## 📁 Repository Structure
+## Project Structure
 
 ```text
 ProjectPilot/
-├── client/          # React 18 Single Page Application (Vite + Tailwind CSS)
+├── client/          # Frontend React SPA (Vite, Tailwind CSS, Radix UI)
 ├── server/          # Express REST API & Socket.IO server
-├── shared/          # Shared TypeScript interfaces, types, and DTO contracts
+├── shared/          # Shared TypeScript contracts and interfaces
 ├── e2e/             # Playwright end-to-end test suite
 └── docker-compose.yml
 ```
 
 ---
 
-## 📄 License
+## License
 
-MIT License.
+MIT

@@ -3,23 +3,17 @@ import { connectDatabase, isDbConnected } from '../config/database';
 import { seedDatabase } from '../services/seed.service';
 
 async function seed() {
-  console.log('🌱 Starting ProjectPilot database seed...');
+  console.log('Seeding database...');
   const connected = await connectDatabase();
   if (!connected || !isDbConnected()) {
-    console.error('\n❌ Could not seed database: MongoDB is not connected.');
-    console.error('👉 Please start MongoDB (e.g. "net start MongoDB" or "mongod")');
-    console.error('👉 Or configure MONGODB_URI in server/.env with your cloud MongoDB cluster.\n');
+    console.error('Failed to seed: MongoDB is not connected.');
     process.exit(1);
   }
 
   await seedDatabase();
 
-  console.log('\n======================================================');
-  console.log('🎉 ProjectPilot Seed Finished Successfully!');
-  console.log('Demo Credentials:');
-  console.log('   Email:    demo@projectpilot.dev');
-  console.log('   Password: Password123!');
-  console.log('======================================================\n');
+  console.log('Database seeded successfully.');
+  console.log('Demo user: demo@projectpilot.dev / Password123!');
 
   await mongoose.disconnect();
   process.exit(0);

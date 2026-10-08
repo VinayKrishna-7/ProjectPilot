@@ -1,4 +1,4 @@
-// Validates and exports all environment variables using a simple validation pattern
+// Environment configuration
 import dotenv from 'dotenv';
 import path from 'path';
 

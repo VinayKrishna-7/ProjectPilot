@@ -22,17 +22,13 @@ export async function connectDatabase(isRetry = false): Promise<boolean> {
       clearTimeout(retryTimer);
       retryTimer = null;
     }
-    console.log(`✅ MongoDB connected: ${conn.connection.host}`);
+    console.log(`MongoDB connected: ${conn.connection.host}`);
     return true;
   } catch (error) {
     isConnected = false;
     if (!isRetry) {
-      console.warn(`\n⚠️  Could not connect to MongoDB at: ${env.MONGODB_URI}`);
-      console.warn(`👉 ProjectPilot server is running in standby mode.`);
-      console.warn(`👉 To connect your database:`);
-      console.warn(`   1. Start your local MongoDB service (e.g., 'net start MongoDB' or 'mongod')`);
-      console.warn(`   2. Or set MONGODB_URI in server/.env to a cloud MongoDB Atlas connection string`);
-      console.warn(`🔄 Automatic reconnection will retry every 10 seconds...\n`);
+      console.warn(`Could not connect to MongoDB at: ${env.MONGODB_URI}`);
+      console.warn(`Server running in standby mode. Retrying connection...`);
     }
 
     if (env.isProduction) {
@@ -52,7 +48,7 @@ export async function connectDatabase(isRetry = false): Promise<boolean> {
 mongoose.connection.on('disconnected', () => {
   if (isConnected) {
     isConnected = false;
-    console.warn('⚠️  MongoDB disconnected');
+    console.warn('MongoDB disconnected');
   }
 });
 
@@ -62,10 +58,10 @@ mongoose.connection.on('connected', async () => {
     const { User } = await import('../models/User');
     const count = await User.countDocuments();
     if (count === 0) {
-      console.log('🌱 Database is empty. Auto-seeding initial demo data...');
+      console.log('Database empty, seeding initial data...');
       const { seedDatabase } = await import('../services/seed.service');
       await seedDatabase();
-      console.log('✅ Initial database seed completed.');
+      console.log('Initial database seed completed.');
     }
   } catch (err) {
     // Non-fatal warning

@@ -68,7 +68,7 @@ app.get(['/health', '/api/health'], (_req, res) => {
   });
 });
 
-// Production readiness & observability probe
+// Readiness check
 app.get(['/readiness', '/api/readiness'], (_req, res) => {
   const mongoState = mongoose.connection.readyState;
   const isHealthy = isDbConnected() || !env.isProduction; // Standby acceptable in dev
@@ -89,10 +89,10 @@ app.get(['/readiness', '/api/readiness'], (_req, res) => {
   });
 });
 
-// Interactive Swagger / OpenAPI Documentation
+// Swagger documentation
 app.use('/api/docs', docsRoutes);
 
-// Seamless in-memory demo router fallback when MongoDB is not connected
+// Demo fallback when MongoDB is not connected
 app.use('/api', (req, res, next) => {
   if (
     env.NODE_ENV === 'test' ||
@@ -108,7 +108,7 @@ app.use('/api', (req, res, next) => {
   next();
 });
 
-// Mount Standard Database API Routes
+// API routes
 app.use('/api/auth', authRoutes);
 app.use('/api/workspaces', workspaceRoutes);
 app.use('/api/workspaces/:workspaceId/projects', workspaceProjectsRouter);
