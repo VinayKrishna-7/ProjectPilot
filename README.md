@@ -1,6 +1,6 @@
 # ProjectPilot
 
-A project management app with Kanban boards, sprint planning, and real-time updates. Built with React, Express, and MongoDB.
+An agile project management and issue tracking tool for engineering teams to plan sprints, track tasks across Kanban boards, and collaborate in real time.
 
 ## Features
 
